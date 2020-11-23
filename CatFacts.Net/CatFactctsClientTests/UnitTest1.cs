@@ -17,52 +17,99 @@ namespace CatFactsClientTests {
         }
 
         [Test]
-        public async Task GetRandomFactAsync_WithoutArguments_ShouldReturnRandomFact() {
+        public async Task GetRandomFactsAsync_WithoutArguments_ShouldReturnRandomFact() {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             // Act
-            List<Fact> fact = await client.GetRandomFactAsync();
-            // Assert
-            fact[0].Used.Should().NotBeNull();
-            fact[0].Source.Should().NotBeNull();
-            fact[0].Type.Should().NotBeNull();
-            fact[0].Deleted.Should().NotBeNull();
-            fact[0].Id.Should().NotBeNull();
-            fact[0].__v.Should().NotBeNull();
-            fact[0].Text.Should().NotBeNull();
-            fact[0].UpdatedAt.Should().NotBeNull();
-            fact[0].CreatedAt.Should().NotBeNull();
-            fact[0].User.Should().NotBeNull();
+            List<Fact> facts = await client.GetRandomFactsAsync();
+            facts.Should().NotBeEmpty();
+            Fact firstFact = facts[0];
 
-            if (fact[0].Status != null) {
-                fact[0].Status.SentCount.Should().NotBeNull();
-                fact[0].Status.Verified.Should().NotBeNull();
+            // Assert
+            firstFact.Used.Should().NotBeNull();
+            firstFact.Source.Should().NotBeNull();
+            firstFact.Type.Should().NotBeNull();
+            firstFact.Deleted.Should().NotBeNull();
+            firstFact.Id.Should().NotBeNull();
+            firstFact.Version.Should().NotBeNull();
+            firstFact.Text.Should().NotBeNull();
+            firstFact.UpdatedAt.Should().NotBeNull();
+            firstFact.CreatedAt.Should().NotBeNull();
+            firstFact.User.Should().NotBeNull();
+
+            if (firstFact.Status != null) {
+                firstFact.Status.SentCount.Should().NotBeNull();
+                firstFact.Status.Verified.Should().NotBeNull();
             }
-            // tak do wszystkich, sprawdzam czy nie nulle
         }
 
         [Test]
-        public async Task GetRandomFactAsync_CatTypeArgument_ShouldFact() {
+        public async Task GetRandomFactsAsync_CatTypeArgument_ShouldReturnRandomFact() {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             // Act
-            List<Fact> fact = await client.GetRandomFactAsync("dog");
-            // Assert
-            fact[0].Used.Should().NotBeNull();
-            fact[0].Source.Should().NotBeNull();
-            fact[0].Type.Should().Be("dog");
-            fact[0].Deleted.Should().NotBeNull();
-            fact[0].Id.Should().NotBeNull();
-            fact[0].__v.Should().NotBeNull();
-            fact[0].Text.Should().NotBeNull();
-            fact[0].UpdatedAt.Should().NotBeNull();
-            fact[0].CreatedAt.Should().NotBeNull();
-            fact[0].User.Should().NotBeNull();
+            List<Fact> facts = await client.GetRandomFactsAsync("horse");
+            facts.Should().NotBeEmpty();
+            Fact firstFact = facts[0];
 
-            if (fact[0].Status != null) {
-                fact[0].Status.SentCount.Should().NotBeNull();
-                fact[0].Status.Verified.Should().NotBeNull();
+            // Assert
+            firstFact.Used.Should().NotBeNull();
+            firstFact.Source.Should().NotBeNull();
+            firstFact.Type.Should().Be("horse");
+            firstFact.Deleted.Should().NotBeNull();
+            firstFact.Id.Should().NotBeNull();
+            firstFact.Version.Should().NotBeNull();
+            firstFact.Text.Should().NotBeNull();
+            firstFact.UpdatedAt.Should().NotBeNull();
+            firstFact.CreatedAt.Should().NotBeNull();
+            firstFact.User.Should().NotBeNull();
+
+            if (firstFact.Status != null) {
+                firstFact.Status.SentCount.Should().NotBeNull();
+                firstFact.Status.Verified.Should().NotBeNull();
             }
+        }
+        [Test]
+        public async Task GetRandomFactsAsync_AmountFive_ShouldReturnFiveFacts() {
+            // Arrange
+            CatFactsClient client = new CatFactsClient();
+
+            // Act
+            List<Fact> facts = await client.GetRandomFactsAsync(amount: 5);
+
+            // Assert
+            facts.Should().NotBeEmpty();
+            facts.Should().HaveCount(5);
+        }
+        [Test]
+        public async Task GetRandomFactsAsync_AmountMoreThanFiveHundred_ShouldThrowArgumentOutOfRangeException() {
+            // Arrange
+            CatFactsClient client = new CatFactsClient();
+            var amount = 501;
+            
+            // Act
+            Func<Task> act = async () => {
+                await client.GetRandomFactsAsync(amount: amount);
+            };
+
+            // Assert
+            await act.Should().ThrowAsync<ArgumentOutOfRangeException>()
+                .WithMessage($"Amount must be between 1 and 500. Got {amount}. (Parameter 'amount')");
+        }
+        [Test]
+        public async Task GetRandomFactsAsync_AmountLessThanOne_ShouldThrowArgumentOutOfRangeException() {
+            // Arrange
+            CatFactsClient client = new CatFactsClient();
+            var amount = 0;
+            
+            // Act
+            Func<Task> act = async () => {
+                await client.GetRandomFactsAsync(amount: amount);
+            };
+            
+            // Assert
+            await act.Should().ThrowAsync<ArgumentOutOfRangeException>()
+                .WithMessage($"Amount must be between 1 and 500. Got {amount}. (Parameter 'amount')");
         }
     }
 }
