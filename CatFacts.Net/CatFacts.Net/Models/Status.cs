@@ -1,4 +1,4 @@
-﻿namespace CatFacts.Net
+﻿namespace CatFacts.Net.Models
 {
     public class Status
     {
