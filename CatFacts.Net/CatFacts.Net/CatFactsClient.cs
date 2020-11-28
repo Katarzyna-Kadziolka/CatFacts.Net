@@ -62,32 +62,4 @@ namespace CatFacts.Net
             return response;
         }
     }
-
-    public class UserSubmittedFacts
-    {
-        public UserSubmittedFact[] all { get; set; }
-    }
-
-    public class UserSubmittedFact
-    {
-        public string _id { get; set; }
-        public string text { get; set; }
-        public string type { get; set; }
-        public User user { get; set; }
-        public int upvotes { get; set; }
-        public bool userUpvoted { get; set; }
-    }
-
-    public class User
-    {
-        public string _id { get; set; }
-        public Name name { get; set; }
-    }
-
-    public class Name
-    {
-        public string first { get; set; }
-        public string last { get; set; }
-    }
-
 }
