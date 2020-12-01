@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using CatFacts.Net;
 using CatFacts.Net.Models;
@@ -13,7 +12,7 @@ namespace CatFactsClientTests {
         public void Constructor_ShouldCreateClient() {
             // Arrange
             // Act
-            CatFactsClient client = new CatFactsClient();
+            CatFactsClient _ = new CatFactsClient();
             // Assert
         }
 
@@ -70,6 +69,7 @@ namespace CatFactsClientTests {
                 firstFact.Status.Verified.Should().NotBeNull();
             }
         }
+
         [Test]
         public async Task GetRandomFactsAsync_AmountFive_ShouldReturnFiveFacts() {
             // Arrange
@@ -82,36 +82,35 @@ namespace CatFactsClientTests {
             facts.Should().NotBeEmpty();
             facts.Should().HaveCount(5);
         }
+
         [Test]
         public async Task GetRandomFactsAsync_AmountMoreThanFiveHundred_ShouldThrowArgumentOutOfRangeException() {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             var amount = 501;
-            
+
             // Act
-            Func<Task> act = async () => {
-                await client.GetRandomFactsAsync(amount: amount);
-            };
+            Func<Task> act = async () => { await client.GetRandomFactsAsync(amount: amount); };
 
             // Assert
             await act.Should().ThrowAsync<ArgumentOutOfRangeException>()
                 .WithMessage($"Amount must be between 1 and 500. Got {amount}. (Parameter 'amount')");
         }
+
         [Test]
         public async Task GetRandomFactsAsync_AmountLessThanOne_ShouldThrowArgumentOutOfRangeException() {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             var amount = 0;
-            
+
             // Act
-            Func<Task> act = async () => {
-                await client.GetRandomFactsAsync(amount: amount);
-            };
-            
+            Func<Task> act = async () => { await client.GetRandomFactsAsync(amount: amount); };
+
             // Assert
             await act.Should().ThrowAsync<ArgumentOutOfRangeException>()
                 .WithMessage($"Amount must be between 1 and 500. Got {amount}. (Parameter 'amount')");
         }
+
         [Test]
         public async Task GetFactAsync_id591f98803b90f7150a19c229_ShouldReturnFact() {
             // Arrange
@@ -119,10 +118,11 @@ namespace CatFactsClientTests {
             string id = "591f98803b90f7150a19c229";
 
             // Act
-            Fact fact = await client.GetFactAsync(id);
+            Fact? fact = await client.GetFactAsync(id);
 
             //Assert
-            fact.Used.Should().NotBeNull();
+            fact.Should().NotBeNull();
+            fact!.Used.Should().NotBeNull();
             fact.Source.Should().NotBeNull();
             fact.Type.Should().NotBeNull();
             fact.Deleted.Should().NotBeNull();
@@ -137,8 +137,8 @@ namespace CatFactsClientTests {
                 fact.Status.SentCount.Should().NotBeNull();
                 fact.Status.Verified.Should().NotBeNull();
             }
-
         }
+
         [Test]
         public async Task GetFactAsync_IdNotExisting_ShouldReturnNull() {
             // Arrange
@@ -151,62 +151,74 @@ namespace CatFactsClientTests {
             //Assert
             fact.Should().BeNull();
         }
+
         [Test]
         public async Task GetQueuedFactsAsync_WithoutArguments_ShouldReturnFacts() {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             // Act
             UserSubmittedFacts facts = await client.GetQueuedFactsAsync();
-            UserSubmittedFact firstFact = facts.All[0];
-            
+
             // Assert
-            firstFact.Id.Should().NotBeNull();
-            firstFact.Text.Should().NotBeNull();
-            firstFact.Type.Should().NotBeNull();
-            firstFact.User.Should().NotBeNull();
-            firstFact.User.Id.Should().NotBeNull();
-            firstFact.User.Name.Should().NotBeNull();
-            firstFact.User.Name.First.Should().NotBeNull();
-            firstFact.User.Name.Last.Should().NotBeNull();
-            firstFact.Upvotes.Should().NotBeNull();
+            facts.Should().NotBeNull();
+            facts.All.Should().NotBeNull();
+            foreach (var fact in facts.All!) {
+                fact.Id.Should().NotBeNull();
+                fact.Text.Should().NotBeNull();
+                fact.Type.Should().NotBeNull();
+                fact.Upvotes.Should().NotBeNull();
+                if (fact.User != null) {
+                    fact.User.Id.Should().NotBeNull();
+                    fact.User.Name.Should().NotBeNull();
+                    fact.User.Name!.First.Should().NotBeNull();
+                    fact.User.Name.Last.Should().NotBeNull();
+                }
+            }
 
             if (facts.UserAddedFacts != null) {
-                UserAddedFacts firstAddedFact = facts.UserAddedFacts[0];
-                firstAddedFact.Id.Should().NotBeNull();
-                firstAddedFact.Text.Should().NotBeNull();
-                firstAddedFact.Type.Should().NotBeNull();
-                firstAddedFact.Used.Should().NotBeNull();
-                firstAddedFact.Upvotes.Should().NotBeNull();
-                firstAddedFact.UserUpvoted.Should().NotBeNull();
+                foreach (var fact in facts.UserAddedFacts) {
+                    fact.Id.Should().NotBeNull();
+                    fact.Text.Should().NotBeNull();
+                    fact.Type.Should().NotBeNull();
+                    fact.Used.Should().NotBeNull();
+                    fact.Upvotes.Should().NotBeNull();
+                    fact.UserUpvoted.Should().NotBeNull();
+                }
             }
         }
+
         [Test]
-        public async Task GetQueuedFactsAsync_DogArgument_ShouldReturnFacts() {
+        public async Task GetQueuedFactsAsync_AnimalTypeDog_ShouldReturnFacts() {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             // Act
             UserSubmittedFacts facts = await client.GetQueuedFactsAsync("dog");
-            UserSubmittedFact firstFact = facts.All[0];
-            
+
             // Assert
-            firstFact.Id.Should().NotBeNull();
-            firstFact.Text.Should().NotBeNull();
-            firstFact.Type.Should().Be("dog");
-            firstFact.User.Should().NotBeNull();
-            firstFact.User.Id.Should().NotBeNull();
-            firstFact.User.Name.Should().NotBeNull();
-            firstFact.User.Name.First.Should().NotBeNull();
-            firstFact.User.Name.Last.Should().NotBeNull();
-            firstFact.Upvotes.Should().NotBeNull();
+            facts.Should().NotBeNull();
+            facts.All.Should().NotBeNull();
+            foreach (var fact in facts.All!) {
+                fact.Id.Should().NotBeNull();
+                fact.Text.Should().NotBeNull();
+                fact.Type.Should().Be("dog");
+                fact.Upvotes.Should().NotBeNull();
+                if (fact.User != null) {
+                    fact.User.Id.Should().NotBeNull();
+                    fact.User.Name.Should().NotBeNull();
+                    fact.User.Name!.First.Should().NotBeNull();
+                    fact.User.Name.Last.Should().NotBeNull();
+                }
+            }
 
             if (facts.UserAddedFacts != null) {
-                UserAddedFacts firstAddedFact = facts.UserAddedFacts[0];
-                firstAddedFact.Id.Should().NotBeNull();
-                firstAddedFact.Text.Should().NotBeNull();
-                firstAddedFact.Type.Should().NotBeNull();
-                firstAddedFact.Used.Should().NotBeNull();
-                firstAddedFact.Upvotes.Should().NotBeNull();
-                firstAddedFact.UserUpvoted.Should().NotBeNull();
+                foreach (var fact in facts.UserAddedFacts) {
+                    fact.Id.Should().NotBeNull();
+                    fact.Text.Should().NotBeNull();
+                    fact.Type.Should().Be("dog");
+                    fact.Used.Should().NotBeNull();
+                    fact.Upvotes.Should().NotBeNull();
+                    fact.UserUpvoted.Should().NotBeNull();
+                }
             }
         }
     }
