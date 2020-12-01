@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace CatFacts.Net.Models
 {
@@ -9,5 +6,8 @@ namespace CatFacts.Net.Models
     {
         [JsonProperty("all")]
         public UserSubmittedFact[]? All { get; set; }
+        [JsonProperty("me")]
+        public UserAddedFacts[]? UserAddedFacts { get; set; }
+
     }
 }

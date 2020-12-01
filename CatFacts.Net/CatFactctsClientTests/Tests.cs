@@ -156,25 +156,57 @@ namespace CatFactsClientTests {
             // Arrange
             CatFactsClient client = new CatFactsClient();
             // Act
-            Fact[] facts = await client.GetQueuedFactsAsync();
-            facts.Should().NotBeEmpty();
-            Fact firstFact = facts[0];
-
+            UserSubmittedFacts facts = await client.GetQueuedFactsAsync();
+            UserSubmittedFact firstFact = facts.All[0];
+            
             // Assert
-            firstFact.Used.Should().NotBeNull();
-            firstFact.Source.Should().NotBeNull();
-            firstFact.Type.Should().NotBeNull();
-            firstFact.Deleted.Should().NotBeNull();
             firstFact.Id.Should().NotBeNull();
-            firstFact.Version.Should().NotBeNull();
             firstFact.Text.Should().NotBeNull();
-            firstFact.UpdatedAt.Should().NotBeNull();
-            firstFact.CreatedAt.Should().NotBeNull();
+            firstFact.Type.Should().NotBeNull();
             firstFact.User.Should().NotBeNull();
+            firstFact.User.Id.Should().NotBeNull();
+            firstFact.User.Name.Should().NotBeNull();
+            firstFact.User.Name.First.Should().NotBeNull();
+            firstFact.User.Name.Last.Should().NotBeNull();
+            firstFact.Upvotes.Should().NotBeNull();
 
-            if (firstFact.Status != null) {
-                firstFact.Status.SentCount.Should().NotBeNull();
-                firstFact.Status.Verified.Should().NotBeNull();
+            if (facts.UserAddedFacts != null) {
+                UserAddedFacts firstAddedFact = facts.UserAddedFacts[0];
+                firstAddedFact.Id.Should().NotBeNull();
+                firstAddedFact.Text.Should().NotBeNull();
+                firstAddedFact.Type.Should().NotBeNull();
+                firstAddedFact.Used.Should().NotBeNull();
+                firstAddedFact.Upvotes.Should().NotBeNull();
+                firstAddedFact.UserUpvoted.Should().NotBeNull();
+            }
+        }
+        [Test]
+        public async Task GetQueuedFactsAsync_DogArgument_ShouldReturnFacts() {
+            // Arrange
+            CatFactsClient client = new CatFactsClient();
+            // Act
+            UserSubmittedFacts facts = await client.GetQueuedFactsAsync("dog");
+            UserSubmittedFact firstFact = facts.All[0];
+            
+            // Assert
+            firstFact.Id.Should().NotBeNull();
+            firstFact.Text.Should().NotBeNull();
+            firstFact.Type.Should().Be("dog");
+            firstFact.User.Should().NotBeNull();
+            firstFact.User.Id.Should().NotBeNull();
+            firstFact.User.Name.Should().NotBeNull();
+            firstFact.User.Name.First.Should().NotBeNull();
+            firstFact.User.Name.Last.Should().NotBeNull();
+            firstFact.Upvotes.Should().NotBeNull();
+
+            if (facts.UserAddedFacts != null) {
+                UserAddedFacts firstAddedFact = facts.UserAddedFacts[0];
+                firstAddedFact.Id.Should().NotBeNull();
+                firstAddedFact.Text.Should().NotBeNull();
+                firstAddedFact.Type.Should().NotBeNull();
+                firstAddedFact.Used.Should().NotBeNull();
+                firstAddedFact.Upvotes.Should().NotBeNull();
+                firstAddedFact.UserUpvoted.Should().NotBeNull();
             }
         }
     }

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatFacts.Net", "CatFacts.Net\CatFacts.Net.csproj", "{5F75B1B6-8D05-43D3-9FAE-B85AD9D53335}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatFacts.Net", "CatFacts.Net\CatFacts.Net.csproj", "{5F75B1B6-8D05-43D3-9FAE-B85AD9D53335}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatFactctsClientTests", "CatFactctsClientTests\CatFactctsClientTests.csproj", "{349677C0-55B1-4610-89C3-833B099817A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatFactsClientTests", "CatFactctsClientTests\CatFactsClientTests.csproj", "{349677C0-55B1-4610-89C3-833B099817A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

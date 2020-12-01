@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using CatFacts.Net.Models;
 using Newtonsoft.Json;
 using RestSharp;
-using RestSharp.Serialization.Json;
 using RestSharp.Serializers.NewtonsoftJson;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace CatFacts.Net
 {
@@ -53,11 +50,11 @@ namespace CatFacts.Net
             return fact;
         }
 
-        public async Task<Fact[]> GetQueuedFactsAsync(string animalType = "cat")
+        public async Task<UserSubmittedFacts> GetQueuedFactsAsync(string animalType = "cat")
         {
 
             var request = new RestRequest("facts").AddQueryParameter("animal_type", animalType);
-            var response = await _client.GetAsync<Fact[]>(request);
+            var response = await _client.GetAsync<UserSubmittedFacts>(request);
 
             return response;
         }
