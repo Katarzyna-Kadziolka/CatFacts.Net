@@ -5,6 +5,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Description>.Net Standard 2.0 client for cat-facts API. It supports C# 8.0. Made using RestSharp.</Description>
+    <PackageProjectUrl>https://github.com/Katarzyna-Kadziolka/CatFacts.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Katarzyna-Kadziolka/CatFacts.Net</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
